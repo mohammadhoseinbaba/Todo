@@ -50,8 +50,8 @@ const TodoList: React.FC = () => {
     }
 
     const renderedTask = task.map((data) => {
-        return <li key={data.id}>your task is : {data.text}
-            <button onClick={() => handleDelete(data.id!)}>Delete</button>
+        return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>your task is : {data.text}
+            <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
         </li>
     })
     const handleDelete = async(id: number) => {
@@ -64,14 +64,16 @@ const TodoList: React.FC = () => {
     }
 
 
-    return <div>
-        <form onSubmit={handleSubmit}>
-            <input placeholder="What Task you want to do ?" onChange={handleWhatTodo} value={whatToDo} />
-            <button type="submit">Submit</button>
+    return <div className=" mt-20 ">
+        <form onSubmit={handleSubmit} className="flex justify-center ">
+            <input className="p-10 outline-none	rounded-xl text-white bg-inherit border " placeholder="What Task you want to do ?" onChange={handleWhatTodo} value={whatToDo} />
+            <button className="ml-10  rounded-xl p-5 bg-slate-300	hover:bg-emerald-700 hover:text-white" type="submit" >Submit</button>
         </form>
-        <ul>
+        <div className="flex justify-center ">
+        <ul className="mt-10 ">
             {renderedTask}
-        </ul>
+        </ul >
+        </div>
     </div>
 }
 export default TodoList

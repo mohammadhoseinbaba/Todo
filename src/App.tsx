@@ -1,8 +1,12 @@
 import TodoList from './Components/Todolist'
-
-
-const App : React.FC =()=>{
-  return <div><TodoList/></div>
+import Navbar from './Components/Navbar'
+import Timer from './Components/Timer'
+const App: React.FC = () => {
+  return <div>
+    <Navbar />
+    <Timer/>
+    <TodoList />
+  </div>
 }
 
 export default App
