@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import axios from 'axios'
 
 interface Task {
-    id?:number;
+    id?: number;
     text: string;
 }
 
@@ -10,7 +10,8 @@ const TodoList: React.FC = () => {
 
     const [whatToDo, setWhatToDo] = useState('')
     const [task, setTask] = useState<Task[]>([])
-
+    const [newText, setNewText] = useState<string>('')
+    const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
 
     const handleWhatTodo = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setWhatToDo(e.target.value)
@@ -48,18 +49,34 @@ const TodoList: React.FC = () => {
             console.error('error deleting task:', error)
         }
     }
+    const handleEdit = async () => {
+        try {
+            const updatedTask = { text: newText }
+            const response = await axios.put('http://localhost:3001/tasks/${id}', updatedTask)
+            setTask(
+                task.map((i) =>
+                    i.id === id ? { ...i, text: response.data.text } : i
+                ))
 
+            setEditingTaskId(null)
+            setNewText('')
+
+        } catch (error) {
+            console.error('can editing task:', error)
+        }
+    }
     const renderedTask = task.map((data) => {
         return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>your task is : {data.text}
             <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
+            <button onClick={handleEdit}>Edit</button>
         </li>
     })
-    const handleDelete = async(id: number) => {
-        try{
+    const handleDelete = async (id: number) => {
+        try {
             await axios.delete(`http://localhost:3001/tasks/${id}`)
             setTask(task.filter((i) => i.id !== id));
-        }catch(error){
-            console.error("Error deleting task:",error)
+        } catch (error) {
+            console.error("Error deleting task:", error)
         }
     }
 
@@ -70,9 +87,9 @@ const TodoList: React.FC = () => {
             <button className="ml-10  rounded-xl p-5 bg-slate-300	hover:bg-emerald-700 hover:text-white" type="submit" >Submit</button>
         </form>
         <div className="flex justify-center ">
-        <ul className="mt-10 ">
-            {renderedTask}
-        </ul >
+            <ul className="mt-10 ">
+                {renderedTask}
+            </ul >
         </div>
     </div>
 }
