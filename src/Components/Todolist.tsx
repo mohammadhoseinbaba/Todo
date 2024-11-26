@@ -49,18 +49,17 @@ const TodoList: React.FC = () => {
             console.error('error deleting task:', error)
         }
     }
-    const handleEdit = async () => {
+    const handleEdit = async (id:number) => {
         try {
             const updatedTask = { text: newText }
-            const response = await axios.put('http://localhost:3001/tasks/${id}', updatedTask)
+            const response = await axios.put(`http://localhost:3001/tasks/${id}`, updatedTask)
             setTask(
-                task.map((i) =>
-                    i.id === id ? { ...i, text: response.data.text } : i
+                task.map((t) =>
+                    t.id === id ? { ...t, text: response.data.text } : t
                 ))
 
             setEditingTaskId(null)
             setNewText('')
-
         } catch (error) {
             console.error('can editing task:', error)
         }
@@ -76,13 +75,14 @@ const TodoList: React.FC = () => {
     }
 
     const renderedTask = task.map((data) => {
-        const isEditing =editingTaskId===data.id 
+        const isEditing = editingTaskId === data.id
 
         return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>
-            {isEditing?(<input type="text" onChange={(e)=>setNewText(e.target.value)} value={newText} className="text-black p-2 rounded"/>):(
-            <>your task is : {data.text}</>)}
-            <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
-            <button onClick={handleEdit}>Edit</button>
+            {isEditing ? (<input type="text" onChange={(e) => setNewText(e.target.value)} value={newText} className="text-black p-2 rounded" />) : (
+                <>your task is : {data.text}</>)}
+            {isEditing ? (<><button onClick={() => handleEdit(data.id!)}>Save</button><button onClick={() => { setEditingTaskId(null); setNewText('') }}>cancel</button></>) : (<>
+                <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
+                <button onClick={() => { setEditingTaskId(data.id!); setNewText(data.text) }}>Edit</button></>)}
         </li>
     })
 
