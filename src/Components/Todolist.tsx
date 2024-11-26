@@ -65,12 +65,7 @@ const TodoList: React.FC = () => {
             console.error('can editing task:', error)
         }
     }
-    const renderedTask = task.map((data) => {
-        return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>your task is : {data.text}
-            <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
-            <button onClick={handleEdit}>Edit</button>
-        </li>
-    })
+
     const handleDelete = async (id: number) => {
         try {
             await axios.delete(`http://localhost:3001/tasks/${id}`)
@@ -80,6 +75,16 @@ const TodoList: React.FC = () => {
         }
     }
 
+    const renderedTask = task.map((data) => {
+        const isEditing =editingTaskId===data.id 
+
+        return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>
+            {isEditing?(<input type="text" onChange={(e)=>setNewText(e.target.value)} value={newText} className="text-black p-2 rounded"/>):(
+            <>your task is : {data.text}</>)}
+            <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
+            <button onClick={handleEdit}>Edit</button>
+        </li>
+    })
 
     return <div className=" mt-20 ">
         <form onSubmit={handleSubmit} className="flex justify-center ">
