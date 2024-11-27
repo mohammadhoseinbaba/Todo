@@ -80,9 +80,9 @@ const TodoList: React.FC = () => {
         return <li className="text-white flex justify-between items-center mb-5 border p-5 rounded " key={data.id}>
             {isEditing ? (<input type="text" onChange={(e) => setNewText(e.target.value)} value={newText} className="text-black p-2 rounded" />) : (
                 <>your task is : {data.text}</>)}
-            {isEditing ? (<><button onClick={() => handleEdit(data.id!)}>Save</button><button onClick={() => { setEditingTaskId(null); setNewText('') }}>cancel</button></>) : (<>
+            {isEditing ? (<><button className="bg-emerald-700 text-white p-5 ml-2 rounded-xl" onClick={() => handleEdit(data.id!)}>Save</button><button className="bg-red-500 p-5 ml-2 rounded-xl" onClick={() => { setEditingTaskId(null); setNewText('') }}>cancel</button></>) : (<>
                 <button className=" bg-red-500 p-5 ml-20 rounded-xl " onClick={() => handleDelete(data.id!)}>Delete</button>
-                <button onClick={() => { setEditingTaskId(data.id!); setNewText(data.text) }}>Edit</button></>)}
+                <button className="bg-white text-black p-5 ml-2 rounded-xl" onClick={() => { setEditingTaskId(data.id!); setNewText(data.text) }}>Edit</button></>)}
         </li>
     })
 
